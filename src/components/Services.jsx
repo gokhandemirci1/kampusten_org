@@ -26,7 +26,7 @@ const services = [
   {
     icon: '👥',
     title: 'Fark Yarat, Kampüse Gel',
-    description: 'iyasadaki klasik özel ders ve mentörlük anlayışının ötesine geçin. Başarıya giden yolu yeniden tanımlayan Kampüsten ailesinin bir parçası olun ve fark yaratın.',
+    description: 'Piyasadaki klasik özel ders ve mentörlük anlayışının ötesine geçin. Başarıya giden yolu yeniden tanımlayan Kampüsten ailesinin bir parçası olun ve fark yaratın.',
   },
   {
     icon: '🎁',
