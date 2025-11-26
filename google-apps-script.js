@@ -13,7 +13,7 @@ function doPost(e) {
   try {
     // Google Sheets ID'nizi buraya yapıştırın
     // Sheets URL'sinden ID'yi alın: https://docs.google.com/spreadsheets/d/[BURASI_ID]/edit
-    const SPREADSHEET_ID = 'BURAYA_SHEET_ID_YAPISTIRIN';
+    const SPREADSHEET_ID = '1K8U9IJ34GNr81FzHu7bWHxvpNtyXXpbCICS326wMM8U';
     const SHEET_NAME = 'Sheet1'; // Varsayılan sayfa adı (veya kendi sayfa adınız)
     
     // Gelen veriyi parse et (FormData veya JSON)
@@ -118,39 +118,19 @@ function doPost(e) {
     sheet.appendRow(row);
     Logger.log('Row added successfully');
     
-    // Başarılı yanıt döndür (HTML redirect ile)
-    return HtmlService.createHtmlOutput(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Başarılı</title>
-        </head>
-        <body>
-          <script>
-            window.top.postMessage({ success: true, message: 'Veri başarıyla kaydedildi' }, '*');
-          </script>
-          <p>Veri başarıyla kaydedildi!</p>
-        </body>
-      </html>
-    `);
+    // Başarılı JSON yanıt döndür (CORS header'ları ile)
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: 'Veri başarıyla kaydedildi'
+    })).setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
     // Hata durumunda
     Logger.log('Hata: ' + error.toString());
-    return HtmlService.createHtmlOutput(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Hata</title>
-        </head>
-        <body>
-          <script>
-            window.top.postMessage({ success: false, error: '${error.toString()}' }, '*');
-          </script>
-          <p>Hata: ${error.toString()}</p>
-        </body>
-      </html>
-    `);
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 

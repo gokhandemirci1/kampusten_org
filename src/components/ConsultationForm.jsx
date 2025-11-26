@@ -90,20 +90,39 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
         params.append('code', formData.code || '')
         params.append('notes', formData.notes || '')
         
-        // Google Apps Script web app'lerinde CORS sorununu önlemek için
-        // mode: 'no-cors' kullanıyoruz
-        const response = await fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors', // CORS sorununu önlemek için
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: params.toString()
-        })
+        // Google Apps Script web app'e veri gönder
+        // iframe kullanarak redirect'i önle
+        const iframe = document.createElement('iframe')
+        iframe.name = 'hidden_iframe'
+        iframe.style.display = 'none'
+        document.body.appendChild(iframe)
         
-        // no-cors modunda response'u okuyamayız, bu yüzden direkt başarı kabul ediyoruz
-        console.log('Form gönderildi:', formData)
-        onSuccess()
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = scriptUrl
+        form.target = 'hidden_iframe'
+        form.style.display = 'none'
+        
+        // Form alanlarını ekle
+        for (const [key, value] of params.entries()) {
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = key
+          input.value = value
+          form.appendChild(input)
+        }
+        
+        // Formu sayfaya ekle ve gönder
+        document.body.appendChild(form)
+        form.submit()
+        
+        // Form gönderildikten sonra temizle
+        setTimeout(() => {
+          document.body.removeChild(form)
+          document.body.removeChild(iframe)
+          console.log('Form gönderildi:', formData)
+          onSuccess()
+        }, 500)
         
       } catch (error) {
         console.error('Error:', error)
