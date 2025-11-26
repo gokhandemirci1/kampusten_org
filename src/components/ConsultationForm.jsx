@@ -91,12 +91,20 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
         params.append('notes', formData.notes || '')
         
         // Google Apps Script web app'e veri gönder
-        // Basit form submit yöntemi (en güvenilir)
+        // iframe kullanarak redirect'i tamamen önle
+        const iframe = document.createElement('iframe')
+        iframe.name = 'hidden_submit_iframe'
+        iframe.style.display = 'none'
+        iframe.style.width = '0'
+        iframe.style.height = '0'
+        iframe.style.border = 'none'
+        document.body.appendChild(iframe)
+        
         const form = document.createElement('form')
         form.method = 'POST'
         form.action = scriptUrl
+        form.target = 'hidden_submit_iframe' // iframe'e gönder, sayfa redirect olmasın
         form.style.display = 'none'
-        form.target = '_blank' // Yeni sekmede aç (redirect'i önlemek için)
         
         // Form alanlarını ekle
         for (const [key, value] of params.entries()) {
@@ -111,16 +119,17 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
         document.body.appendChild(form)
         form.submit()
         
-        // Form gönderildikten sonra temizle
+        // Form gönderildikten sonra temizle ve başarı mesajını göster
         setTimeout(() => {
           try {
             document.body.removeChild(form)
+            document.body.removeChild(iframe)
           } catch (e) {
-            console.log('Form zaten kaldırılmış')
+            console.log('Elementler zaten kaldırılmış')
           }
           console.log('Form gönderildi:', formData)
           onSuccess()
-        }, 1000)
+        }, 500)
         
       } catch (error) {
         console.error('Error:', error)
