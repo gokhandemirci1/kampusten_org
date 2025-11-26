@@ -13,7 +13,7 @@ const Footer = ({ onConsultationClick }) => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden">
+    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden" role="contentinfo">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -39,8 +39,11 @@ const Footer = ({ onConsultationClick }) => {
             <div className="flex items-center mb-6">
               <img
                 src="/images/logo.jpg"
-                alt="Kampüsten Logo"
+                alt="Kampüsten - Sınava Yenilikçi Bak Eğitim Platformu Logo"
                 className="w-16 h-16 rounded-full border-4 border-brand object-cover shadow-lg"
+                loading="lazy"
+                width="64"
+                height="64"
               />
               <h3 className="ml-4 text-2xl font-bold text-brand">Kampüsten</h3>
             </div>

@@ -22,17 +22,21 @@ const Navbar = ({ onHomeClick, onServicesClick, onConsultationClick }) => {
           >
             <img
               src="/images/logo.jpg"
-              alt="Kampüsten Logo"
+              alt="Kampüsten - Sınava Yenilikçi Bak Eğitim Platformu Logo"
               className="w-14 h-14 rounded-full border-4 border-brand shadow-lg object-cover"
+              loading="eager"
+              width="56"
+              height="56"
             />
           </motion.div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8" aria-label="Ana navigasyon">
             <motion.button
               whileHover={{ y: -2 }}
               onClick={onHomeClick}
               className="text-gray-300 hover:text-brand font-medium transition-colors relative group"
+              aria-label="Ana sayfaya git"
             >
               Ana Sayfa
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand group-hover:w-full transition-all duration-300" />
@@ -42,6 +46,7 @@ const Navbar = ({ onHomeClick, onServicesClick, onConsultationClick }) => {
               whileHover={{ y: -2 }}
               onClick={onServicesClick}
               className="text-gray-300 hover:text-brand font-medium transition-colors relative group"
+              aria-label="Servislerimiz bölümüne git"
             >
               Servislerimiz
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand group-hover:w-full transition-all duration-300" />
@@ -52,10 +57,11 @@ const Navbar = ({ onHomeClick, onServicesClick, onConsultationClick }) => {
               whileTap={{ scale: 0.95 }}
               onClick={onConsultationClick}
               className="bg-brand hover:bg-brand-dark text-gray-900 font-semibold px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:shadow-brand/50 transition-all duration-300"
+              aria-label="Ücretsiz sorun tespit formunu aç"
             >
               Ücretsiz Sorun Tespit
             </motion.button>
-          </div>
+          </nav>
 
           {/* Mobile Menu Button */}
           <button

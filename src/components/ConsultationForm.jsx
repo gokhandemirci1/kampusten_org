@@ -150,6 +150,7 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 50 }}
         className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden"
+        aria-labelledby="consultation-heading"
       >
         {/* Animated Background */}
         <div className="absolute inset-0 opacity-5">
@@ -180,6 +181,7 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
             <div className="flex justify-between items-start mb-8">
               <div>
                 <motion.h2
+                  id="consultation-heading"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="text-3xl md:text-4xl font-bold text-gradient mb-3"

@@ -61,7 +61,7 @@ const Services = () => {
   }
 
   return (
-    <section ref={sectionRef} id="services" className="py-32 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+    <section ref={sectionRef} id="services" className="py-32 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden" aria-labelledby="services-heading">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -89,6 +89,7 @@ const Services = () => {
             HİZMETLERİMİZ
           </motion.span>
           <motion.h2
+            id="services-heading"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -116,7 +117,7 @@ const Services = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service, index) => (
-            <motion.div
+            <motion.article
               key={index}
               variants={cardVariants}
               whileHover={{ y: -15, scale: 1.02, rotateY: 5 }}
@@ -158,7 +159,7 @@ const Services = () => {
                   {service.description}
                 </p>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </motion.div>
       </div>

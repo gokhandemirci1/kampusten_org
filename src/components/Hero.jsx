@@ -19,6 +19,7 @@ const Hero = ({ onConsultationClick }) => {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      aria-label="Ana sayfa hero bölümü"
     >
       {/* Background Image - iOS uyumlu */}
       <div 
@@ -28,6 +29,8 @@ const Hero = ({ onConsultationClick }) => {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
+        role="img"
+        aria-label="Kampüsten eğitim platformu hero arka plan görseli"
       />
       {/* Overlay - Brand color with better visibility */}
       <div className="absolute inset-0 bg-gradient-to-br from-brand/75 via-brand/70 to-brand-dark/75 z-[1]" />
