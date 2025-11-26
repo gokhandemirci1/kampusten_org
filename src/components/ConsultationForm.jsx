@@ -76,7 +76,7 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
     if (validate()) {
       try {
         // Google Apps Script web app URL'i
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwUQsjKyOBxpaKz8Er4xCPtHyoaHHRVlswHLjDsw4ztQXm5FZggP17_XivMFal0ZVYp/exec'
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxt-LFqDigIrksXWvYlp0YpNP1C6s53lKtDzkb-ORPcFYjdTLehaX_il-iL5RKuN3Fq/exec'
         
         // Form verilerini URL-encoded formatında hazırla (Google Apps Script için daha uyumlu)
         const params = new URLSearchParams()
