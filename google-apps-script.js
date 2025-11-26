@@ -12,11 +12,30 @@
 function doPost(e) {
   try {
     // Google Sheets ID'nizi buraya yapıştırın
+    // Sheets URL'sinden ID'yi alın: https://docs.google.com/spreadsheets/d/[BURASI_ID]/edit
     const SPREADSHEET_ID = 'BURAYA_SHEET_ID_YAPISTIRIN';
     const SHEET_NAME = 'Form Verileri'; // Sayfa adı
     
-    // Gelen veriyi parse et
-    const data = JSON.parse(e.postData.contents);
+    // Gelen veriyi parse et (FormData veya JSON)
+    let data = {};
+    
+    if (e.parameter) {
+      // FormData ile gönderilmişse
+      data = {
+        fullName: e.parameter.fullName || '',
+        grade: e.parameter.grade || '',
+        examField: e.parameter.examField || '',
+        phone: e.parameter.phone || '',
+        email: e.parameter.email || '',
+        date: e.parameter.date || '',
+        time: e.parameter.time || '',
+        code: e.parameter.code || '',
+        notes: e.parameter.notes || ''
+      };
+    } else if (e.postData && e.postData.contents) {
+      // JSON ile gönderilmişse
+      data = JSON.parse(e.postData.contents);
+    }
     
     // Sheets'i aç
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -65,17 +84,45 @@ function doPost(e) {
     
     sheet.appendRow(row);
     
-    // Başarılı yanıt döndür
-    return ContentService
-      .createTextOutput(JSON.stringify({ success: true, message: 'Veri başarıyla kaydedildi' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    // Başarılı yanıt döndür (HTML redirect ile)
+    return HtmlService.createHtmlOutput(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Başarılı</title>
+        </head>
+        <body>
+          <script>
+            window.top.postMessage({ success: true, message: 'Veri başarıyla kaydedildi' }, '*');
+          </script>
+          <p>Veri başarıyla kaydedildi!</p>
+        </body>
+      </html>
+    `);
       
   } catch (error) {
     // Hata durumunda
-    return ContentService
-      .createTextOutput(JSON.stringify({ success: false, error: error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
+    Logger.log('Hata: ' + error.toString());
+    return HtmlService.createHtmlOutput(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Hata</title>
+        </head>
+        <body>
+          <script>
+            window.top.postMessage({ success: false, error: '${error.toString()}' }, '*');
+          </script>
+          <p>Hata: ${error.toString()}</p>
+        </body>
+      </html>
+    `);
   }
+}
+
+// Test için doGet fonksiyonu
+function doGet(e) {
+  return ContentService.createTextOutput('Google Apps Script çalışıyor! Form verilerini göndermek için POST kullanın.');
 }
 
 /**

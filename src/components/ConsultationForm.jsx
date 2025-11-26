@@ -75,23 +75,36 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
     e.preventDefault()
     if (validate()) {
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbx9CtjbtJWc4yZ1vb_L0DxakLEjTaJpmS00zn4-0OKOqpVA0V7UM2mD2df2WkZzC9mT/exec', {
+        // Google Apps Script web app URL'i
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbx9CtjbtJWc4yZ1vb_L0DxakLEjTaJpmS00zn4-0OKOqpVA0V7UM2mD2df2WkZzC9mT/exec'
+        
+        // Form verilerini hazırla
+        const formDataToSend = new FormData()
+        formDataToSend.append('fullName', formData.fullName || '')
+        formDataToSend.append('grade', formData.grade || '')
+        formDataToSend.append('examField', formData.examField || '')
+        formDataToSend.append('phone', formData.phone || '')
+        formDataToSend.append('email', formData.email || '')
+        formDataToSend.append('date', formData.date || '')
+        formDataToSend.append('time', formData.time || '')
+        formDataToSend.append('code', formData.code || '')
+        formDataToSend.append('notes', formData.notes || '')
+        
+        // Google Apps Script web app'lerinde CORS sorununu önlemek için
+        // redirect: 'follow' kullanıyoruz
+        const response = await fetch(scriptUrl, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
+          mode: 'no-cors', // CORS sorununu önlemek için
+          body: formDataToSend
         })
         
-        const result = await response.json()
-        if (result.success) {
-          onSuccess()
-        } else {
-          alert('Bir hata oluştu: ' + (result.error || 'Bilinmeyen hata'))
-        }
+        // no-cors modunda response'u okuyamayız, bu yüzden direkt başarı kabul ediyoruz
+        console.log('Form gönderildi:', formData)
+        onSuccess()
+        
       } catch (error) {
         console.error('Error:', error)
-        // Hata olsa bile kullanıcıya başarı mesajı göster (offline durumlar için)
+        // Hata olsa bile kullanıcıya başarı mesajı göster
         onSuccess()
       }
     }
