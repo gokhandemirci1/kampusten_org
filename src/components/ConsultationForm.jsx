@@ -76,7 +76,7 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
     if (validate()) {
       try {
         // Google Apps Script web app URL'i
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbx9CtjbtJWc4yZ1vb_L0DxakLEjTaJpmS00zn4-0OKOqpVA0V7UM2mD2df2WkZzC9mT/exec'
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwUQsjKyOBxpaKz8Er4xCPtHyoaHHRVlswHLjDsw4ztQXm5FZggP17_XivMFal0ZVYp/exec'
         
         // Form verilerini hazırla
         const formDataToSend = new FormData()
