@@ -19,12 +19,17 @@ function doPost(e) {
     // Gelen veriyi parse et (FormData veya JSON)
     let data = {};
     
-    // Log için
-    Logger.log('Received data: ' + JSON.stringify(e));
+    // Log için - tüm gelen veriyi logla
+    Logger.log('=== YENİ FORM GÖNDERİMİ ===');
+    Logger.log('e.parameter: ' + JSON.stringify(e.parameter));
+    Logger.log('e.postData: ' + JSON.stringify(e.postData));
+    Logger.log('Full event: ' + JSON.stringify(e));
     
     // URL-encoded veya FormData formatını kontrol et
-    if (e.parameter) {
+    // HTML form submit ile gönderildiğinde veriler e.parameter içinde gelir
+    if (e.parameter && Object.keys(e.parameter).length > 0) {
       // URL-encoded veya FormData ile gönderilmişse (e.parameter otomatik parse edilir)
+      Logger.log('Veri e.parameter içinde geldi');
       data = {
         fullName: e.parameter.fullName || '',
         grade: e.parameter.grade || '',
@@ -37,6 +42,7 @@ function doPost(e) {
         notes: e.parameter.notes || ''
       };
     } else if (e.postData && e.postData.contents) {
+      Logger.log('Veri e.postData.contents içinde geldi');
       // URL-encoded formatında gönderilmişse
       const contentType = e.postData.type || '';
       if (contentType.indexOf('application/x-www-form-urlencoded') !== -1 || 
@@ -61,9 +67,18 @@ function doPost(e) {
     
     Logger.log('Parsed data: ' + JSON.stringify(data));
     
+    // Veri kontrolü
+    if (!data || Object.keys(data).length === 0) {
+      Logger.log('HATA: Veri parse edilemedi veya boş!');
+      throw new Error('Form verisi alınamadı');
+    }
+    
     // Sheets'i aç
+    Logger.log('Sheets açılıyor, ID: ' + SPREADSHEET_ID);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    Logger.log('Sheets açıldı: ' + ss.getName());
     let sheet = ss.getSheetByName(SHEET_NAME);
+    Logger.log('Sayfa bulundu: ' + (sheet ? sheet.getName() : 'BULUNAMADI'));
     
     // Eğer sayfa yoksa ilk sayfayı kullan veya oluştur
     if (!sheet) {
@@ -114,9 +129,10 @@ function doPost(e) {
       data.notes || ''
     ];
     
-    Logger.log('Adding row: ' + JSON.stringify(row));
+    Logger.log('Eklenen satır: ' + JSON.stringify(row));
+    Logger.log('Mevcut satır sayısı: ' + sheet.getLastRow());
     sheet.appendRow(row);
-    Logger.log('Row added successfully');
+    Logger.log('Satır başarıyla eklendi! Yeni satır sayısı: ' + sheet.getLastRow());
     
     // Başarılı JSON yanıt döndür (CORS header'ları ile)
     return ContentService.createTextOutput(JSON.stringify({
