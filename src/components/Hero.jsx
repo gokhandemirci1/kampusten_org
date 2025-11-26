@@ -19,13 +19,16 @@ const Hero = ({ onConsultationClick }) => {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: 'url(/images/hero_background.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
     >
+      {/* Background Image - iOS uyumlu */}
+      <div 
+        className="absolute inset-0 hero-bg-image"
+        style={{
+          backgroundImage: 'url(/images/hero_background.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
       {/* Overlay - Brand color with better visibility */}
       <div className="absolute inset-0 bg-gradient-to-br from-brand/75 via-brand/70 to-brand-dark/75 z-[1]" />
       

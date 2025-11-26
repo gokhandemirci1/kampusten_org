@@ -16,6 +16,24 @@
   .text-gradient {
     @apply bg-gradient-to-r from-gray-900 to-brand-dark bg-clip-text text-transparent;
   }
+  
+  /* Hero background - Desktop için fixed, iOS için scroll */
+  .hero-bg-image {
+    background-attachment: fixed;
+    z-index: 0;
+  }
+  
+  /* iOS Safari için background-attachment: fixed desteği yok */
+  @supports (-webkit-touch-callout: none) {
+    .hero-bg-image {
+      background-attachment: scroll;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+    }
+  }
 }
 
 
