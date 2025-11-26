@@ -78,24 +78,27 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
         // Google Apps Script web app URL'i
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbwUQsjKyOBxpaKz8Er4xCPtHyoaHHRVlswHLjDsw4ztQXm5FZggP17_XivMFal0ZVYp/exec'
         
-        // Form verilerini hazırla
-        const formDataToSend = new FormData()
-        formDataToSend.append('fullName', formData.fullName || '')
-        formDataToSend.append('grade', formData.grade || '')
-        formDataToSend.append('examField', formData.examField || '')
-        formDataToSend.append('phone', formData.phone || '')
-        formDataToSend.append('email', formData.email || '')
-        formDataToSend.append('date', formData.date || '')
-        formDataToSend.append('time', formData.time || '')
-        formDataToSend.append('code', formData.code || '')
-        formDataToSend.append('notes', formData.notes || '')
+        // Form verilerini URL-encoded formatında hazırla (Google Apps Script için daha uyumlu)
+        const params = new URLSearchParams()
+        params.append('fullName', formData.fullName || '')
+        params.append('grade', formData.grade || '')
+        params.append('examField', formData.examField || '')
+        params.append('phone', formData.phone || '')
+        params.append('email', formData.email || '')
+        params.append('date', formData.date || '')
+        params.append('time', formData.time || '')
+        params.append('code', formData.code || '')
+        params.append('notes', formData.notes || '')
         
         // Google Apps Script web app'lerinde CORS sorununu önlemek için
-        // redirect: 'follow' kullanıyoruz
+        // mode: 'no-cors' kullanıyoruz
         const response = await fetch(scriptUrl, {
           method: 'POST',
           mode: 'no-cors', // CORS sorununu önlemek için
-          body: formDataToSend
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params.toString()
         })
         
         // no-cors modunda response'u okuyamayız, bu yüzden direkt başarı kabul ediyoruz

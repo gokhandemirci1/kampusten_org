@@ -14,13 +14,17 @@ function doPost(e) {
     // Google Sheets ID'nizi buraya yapıştırın
     // Sheets URL'sinden ID'yi alın: https://docs.google.com/spreadsheets/d/[BURASI_ID]/edit
     const SPREADSHEET_ID = 'BURAYA_SHEET_ID_YAPISTIRIN';
-    const SHEET_NAME = 'Form Verileri'; // Sayfa adı
+    const SHEET_NAME = 'Sheet1'; // Varsayılan sayfa adı (veya kendi sayfa adınız)
     
     // Gelen veriyi parse et (FormData veya JSON)
     let data = {};
     
+    // Log için
+    Logger.log('Received data: ' + JSON.stringify(e));
+    
+    // URL-encoded veya FormData formatını kontrol et
     if (e.parameter) {
-      // FormData ile gönderilmişse
+      // URL-encoded veya FormData ile gönderilmişse (e.parameter otomatik parse edilir)
       data = {
         fullName: e.parameter.fullName || '',
         grade: e.parameter.grade || '',
@@ -33,17 +37,45 @@ function doPost(e) {
         notes: e.parameter.notes || ''
       };
     } else if (e.postData && e.postData.contents) {
-      // JSON ile gönderilmişse
-      data = JSON.parse(e.postData.contents);
+      // URL-encoded formatında gönderilmişse
+      const contentType = e.postData.type || '';
+      if (contentType.indexOf('application/x-www-form-urlencoded') !== -1 || 
+          contentType.indexOf('multipart/form-data') !== -1) {
+        // URL-encoded formatını parse et
+        const params = e.postData.contents.split('&');
+        params.forEach(param => {
+          const [key, value] = param.split('=');
+          if (key && value) {
+            data[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, ' '));
+          }
+        });
+      } else {
+        // JSON ile gönderilmişse
+        try {
+          data = JSON.parse(e.postData.contents);
+        } catch (parseError) {
+          Logger.log('JSON parse error: ' + parseError.toString());
+        }
+      }
     }
+    
+    Logger.log('Parsed data: ' + JSON.stringify(data));
     
     // Sheets'i aç
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     let sheet = ss.getSheetByName(SHEET_NAME);
     
-    // Eğer sayfa yoksa oluştur
+    // Eğer sayfa yoksa ilk sayfayı kullan veya oluştur
     if (!sheet) {
-      sheet = ss.insertSheet(SHEET_NAME);
+      sheet = ss.getSheets()[0]; // İlk sayfayı kullan
+      if (!sheet) {
+        sheet = ss.insertSheet(SHEET_NAME);
+      }
+    }
+    
+    // Başlık satırını kontrol et, yoksa ekle
+    const lastRow = sheet.getLastRow();
+    if (lastRow === 0) {
       // Başlıkları ekle
       const headers = [
         'Tarih',
@@ -82,7 +114,9 @@ function doPost(e) {
       data.notes || ''
     ];
     
+    Logger.log('Adding row: ' + JSON.stringify(row));
     sheet.appendRow(row);
+    Logger.log('Row added successfully');
     
     // Başarılı yanıt döndür (HTML redirect ile)
     return HtmlService.createHtmlOutput(`
