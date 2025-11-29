@@ -189,7 +189,7 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
                   Süreç içerisindeki problemlerinizi ücretsiz tespit edelim.
                 </motion.h2>
                 <p className="text-gray-600 text-lg">
-                  Ücretsiz bir görüşme ayarlamak için aşağıdaki formu doldurabilirsiniz
+                  Ücretsiz koçluk almak için aşağıdaki formu doldurabilirsiniz
                 </p>
               </div>
               <motion.button
@@ -420,7 +420,7 @@ const ConsultationForm = ({ onClose, onSuccess }) => {
                 transition={{ delay: 0.9 }}
               >
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Görüşme için iletmek istediğiniz özel bir not var mı?
+                  Koçluk için iletmek istediğiniz özel bir not var mı?
                 </label>
                 <textarea
                   name="notes"

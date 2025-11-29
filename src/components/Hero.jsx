@@ -117,7 +117,7 @@ const Hero = ({ onConsultationClick }) => {
           onClick={onConsultationClick}
           className="bg-white text-gray-900 font-bold px-10 py-4 rounded-full text-lg shadow-2xl hover:shadow-brand/50 transition-all duration-300 relative overflow-hidden group"
         >
-          <span className="relative z-10">Ücretsiz Danışmanlık Al</span>
+          <span className="relative z-10">Ücretsiz Koçluk Al</span>
           <motion.div
             className="absolute inset-0 bg-brand"
             initial={{ x: '-100%' }}
